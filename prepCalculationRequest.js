@@ -29,13 +29,12 @@ sendLambdaSNS = function (event, context, message, topic, subject) {
 
 mainProcess = function (context, event, requestUUID, ICIN, NAV, dateSequence, dateTime, sequence, category, frequency, description, user) {
     //write to the database
-    var doc = require('dynamodb-doc');
-    var dynamo = new doc.DynamoDB();
+    var dynamo = new aws.DynamoDB();
     var sequenceFloor = (parseInt(sequence) - 500);
     console.log("sequence in "+sequence);
     console.log("sequence floor "+sequenceFloor);
     var params = {
-        TableName: 'NavHistory',
+        TableName: 'NAVHistory',
         // IndexName: 'index_name', // optional (if querying an index)
 
         // Expression to filter on indexed attributes
@@ -45,8 +44,8 @@ mainProcess = function (context, event, requestUUID, ICIN, NAV, dateSequence, da
             '#rangekey': 'Sequence',
         },
         ExpressionAttributeValues: {
-            ':hk_val': ICIN,
-            ':rk_val': sequenceFloor,
+            ':hk_val': {"S": ICIN},
+            ':rk_val': {"N": sequenceFloor.toString()},
         }
     };
     dynamo.query(params, function (err, data) {
