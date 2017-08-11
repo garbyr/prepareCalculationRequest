@@ -31,7 +31,7 @@ mainProcess = function (context, event, requestUUID, ICIN, NAV, dateSequence, da
     //write to the database
     var doc = require('dynamodb-doc');
     var dynamo = new doc.DynamoDB();
-    var sequenceWeekFloor = (sequence - 500);
+    var sequenceWeekFloor = (parseInt(sequence) - 500);
     console.log("sequence in "+sequence);
     console.log("sequence floor "+sequenceFloor);
     var params = {
